@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.1</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.velocitymotors</groupId>
+    <artifactId>car-booking-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>car-booking-service</name>
+    <description>Velocity Motors Car Booking Service</description>
+
+    <properties>
+        <java.version>21</java.version>
+        <openapi-generator.version>7.26.0</openapi-generator.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>7.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.46</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>11.0.24</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <configuration>
+                    <configOptions>
+                        <useSpringBoot4>true</useSpringBoot4> <!-- Spring Boot 4 target (implies useJakartaEe) -->
+                        <useJackson3>true</useJackson3> <!-- Jackson 3; needs useSpringBoot4 -->
+                        <openApiNullable>false</openApiNullable> <!-- plain fields, no JsonNullable wrappers -->
+                        <hideGenerationTimestamp>true</hideGenerationTimestamp> <!-- no timestamp header, keeps diffs stable -->
+                    </configOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>car-booking-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/car-booking-api.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <output>${project.build.directory}/generated-sources/openapi/booking</output>
+                            <apiPackage>com.velocitymotors.carbooking.generated.booking.api</apiPackage>
+                            <modelPackage>com.velocitymotors.carbooking.generated.booking.model</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly> <!-- interface stubs only, no server scaffolding -->
+                                <useTags>true</useTags> <!-- one interface per OpenAPI tag (BookingApi), not DefaultApi -->
+                                <requestMappingMode>api_interface</requestMappingMode> <!-- class-level @RequestMapping on the interface -->
+                                <useResponseEntity>false</useResponseEntity> <!-- return bare models; status via @ResponseStatus -->
+                                <useBeanValidation>false</useBeanValidation> <!-- no @Valid/@Validated at the web layer; the service validates. @NotNull on required fields stays -->
+                                <documentationProvider>none</documentationProvider> <!-- no springdoc annotations; UI reads the YAML. Also pins annotationLibrary to none -->
+                                <basePackage>com.velocitymotors.carbooking.generated.booking</basePackage> <!-- keep generated classes out of org.openapitools -->
+                                <configPackage>com.velocitymotors.carbooking.generated.booking.configuration</configPackage>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

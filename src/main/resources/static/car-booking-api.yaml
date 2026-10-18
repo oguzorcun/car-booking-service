@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Car Booking API
+  description: API for creating car rental bookings
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Booking
+    description: Car booking operations
+paths:
+  /bookings:
+    post:
+      tags:
+        - Booking
+      operationId: createBooking
+      summary: Create a car booking
+      description: Creates a booking and confirms it depending on the payment mode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+      responses:
+        '201':
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          description: Invalid booking request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Payment rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CreateBookingRequest:
+      type: object
+      required:
+        - customerName
+        - vehicleId
+        - rentalStartDate
+        - rentalEndDate
+        - vehicleCategory
+        - paymentMode
+        - paymentReference
+      properties:
+        customerName:
+          type: string
+          example: John Doe
+        vehicleId:
+          type: string
+          example: VEH-001
+        rentalStartDate:
+          type: string
+          format: date
+          example: '2026-11-01'
+        rentalEndDate:
+          type: string
+          format: date
+          example: '2026-11-05'
+        vehicleCategory:
+          $ref: '#/components/schemas/VehicleCategory'
+        paymentMode:
+          $ref: '#/components/schemas/PaymentMode'
+        paymentReference:
+          type: string
+          example: DL123456789
+
+    BookingResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: BKG0012345
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+
+    BookingStatus:
+      type: string
+      enum:
+        - PENDING_PAYMENT
+        - CONFIRMED
+        - CANCELLED
+
+    PaymentMode:
+      type: string
+      enum:
+        - DIGITAL_WALLET
+        - CREDIT_CARD
+        - BANK_TRANSFER
+
+    VehicleCategory:
+      type: string
+      enum:
+        - COMPACT
+        - SEDAN
+        - SUV
+        - LUXURY
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
