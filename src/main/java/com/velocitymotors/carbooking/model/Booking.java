@@ -17,4 +17,12 @@ public class Booking {
     private PaymentMode paymentMode;
     private String paymentReference;
     private BookingStatus status;
+
+    public void confirm() {
+        status = BookingStatus.CONFIRMED;
+    }
+
+    public void awaitPayment() {
+        status = BookingStatus.PENDING_PAYMENT;
+    }
 }
