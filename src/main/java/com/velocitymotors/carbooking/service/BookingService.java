@@ -11,12 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class BookingService {
 
+    private static final int BANK_TRANSFER_PAYMENT_DEADLINE_DAYS = 2;
     private final CreditCardClient creditCardClient;
     private final BookingRepository bookingRepository;
 
@@ -61,6 +63,15 @@ public class BookingService {
                 booking.confirm();
                 bookingRepository.save(booking);
             }
+        });
+    }
+
+    @Transactional
+    public void cancelExpiredBankTransferBookings() {
+        LocalDate earliestPossibleRentalStartDate = LocalDate.now().plusDays(BANK_TRANSFER_PAYMENT_DEADLINE_DAYS);
+        bookingRepository.findPendingBankTransferBookingsStartingBefore(earliestPossibleRentalStartDate).forEach(booking -> {
+            booking.cancel();
+            bookingRepository.save(booking);
         });
     }
 }

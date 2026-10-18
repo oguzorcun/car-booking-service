@@ -1,9 +1,13 @@
 package com.velocitymotors.carbooking.persistance;
 
 import com.velocitymotors.carbooking.model.Booking;
+import com.velocitymotors.carbooking.model.BookingStatus;
+import com.velocitymotors.carbooking.model.PaymentMode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,6 +22,15 @@ public class BookingRepository {
 
     public Optional<Booking> findById(String id) {
         return repository.findById(id).map(BookingRepository::toDomain);
+    }
+
+    public List<Booking> findPendingBankTransferBookingsStartingBefore(LocalDate date) {
+        return repository
+                .findByStatusAndPaymentModeAndRentalStartDateLessThan(
+                        BookingStatus.PENDING_PAYMENT, PaymentMode.BANK_TRANSFER, date)
+                .stream()
+                .map(BookingRepository::toDomain)
+                .toList();
     }
 
     private static BookingEntity toEntity(Booking booking) {

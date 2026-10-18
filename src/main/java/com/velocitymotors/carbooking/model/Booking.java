@@ -25,4 +25,8 @@ public class Booking {
     public void awaitPayment() {
         status = BookingStatus.PENDING_PAYMENT;
     }
+
+    public void cancel() {
+        status = BookingStatus.CANCELLED;
+    }
 }

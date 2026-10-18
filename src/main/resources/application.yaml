@@ -16,3 +16,7 @@ kafka:
     auto-offset-reset: earliest
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+bank-transfer-payment:
+  topic: bank-transfer-payment-events
+  cancellation-schedule: "0 0 * * * *" # Runs every hour, on the hour (09:00, 10:00, 11:00)
