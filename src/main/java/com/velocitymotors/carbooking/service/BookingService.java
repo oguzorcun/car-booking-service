@@ -3,10 +3,13 @@ package com.velocitymotors.carbooking.service;
 import com.velocitymotors.carbooking.client.CreditCardClient;
 import com.velocitymotors.carbooking.exception.PaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;
+import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.CreateBookingCommand;
+import com.velocitymotors.carbooking.model.PaymentMode;
 import com.velocitymotors.carbooking.persistance.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -17,6 +20,7 @@ public class BookingService {
     private final CreditCardClient creditCardClient;
     private final BookingRepository bookingRepository;
 
+    @Transactional
     public Booking createBooking(CreateBookingCommand command) {
 
         Booking booking =  Booking.builder()
@@ -47,5 +51,16 @@ public class BookingService {
 
     private String generateBookingId() {
         return "BKG" + new Random().nextInt(9_000_000) + 1_000_000;
+    }
+
+    @Transactional
+    public void confirmBankTransferPayment(String bookingId) {
+        bookingRepository.findById(bookingId).ifPresent(booking -> {
+            if (booking.getStatus() == BookingStatus.PENDING_PAYMENT
+                    && booking.getPaymentMode() == PaymentMode.BANK_TRANSFER) {
+                booking.confirm();
+                bookingRepository.save(booking);
+            }
+        });
     }
 }
