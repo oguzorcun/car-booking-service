@@ -16,7 +16,7 @@ import org.springframework.web.client.RestClient;
 import java.time.LocalDate;
 
 /**
- * Shared plumbing for end-to-end tests
+ * Shared plumbing for integration tests
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)

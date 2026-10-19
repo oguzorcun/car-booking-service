@@ -2,7 +2,7 @@ package com.velocitymotors.carbooking.unit;
 
 import com.velocitymotors.carbooking.async.BankTransferPaymentEvent;
 import com.velocitymotors.carbooking.async.BankTransferPaymentListener;
-import com.velocitymotors.carbooking.service.BankPaymentService;
+import com.velocitymotors.carbooking.service.BankTransferPaymentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,13 +13,13 @@ import static org.mockito.Mockito.verify;
 
 class BankTransferPaymentListenerTest {
 
-    private final BankPaymentService bankPaymentService = mock(BankPaymentService.class);
+    private final BankTransferPaymentService bankTransferPaymentService = mock(BankTransferPaymentService.class);
 
     private BankTransferPaymentListener listener;
 
     @BeforeEach
     void setUp() {
-        listener = new BankTransferPaymentListener(bankPaymentService);
+        listener = new BankTransferPaymentListener(bankTransferPaymentService);
     }
 
     @Test
@@ -33,6 +33,6 @@ class BankTransferPaymentListenerTest {
 
         listener.onPaymentReceived(event);
 
-        verify(bankPaymentService).confirmBooking(event);
+        verify(bankTransferPaymentService).confirmBooking(event);
     }
 }

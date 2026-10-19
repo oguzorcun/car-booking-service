@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BankPaymentService {
+public class BankTransferPaymentService {
 
     private static final Pattern TRANSACTION_DETAILS = Pattern.compile("\\S+\\s+(?<bookingId>BKG\\d{7})");
 
