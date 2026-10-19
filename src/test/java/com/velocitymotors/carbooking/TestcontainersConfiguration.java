@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.e2e;
+package com.velocitymotors.carbooking;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import org.testcontainers.utility.DockerImageName;
  * Anno @ServiceConnection makes Spring to use created test container ports instead of ports on env vars
  */
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection

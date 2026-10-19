@@ -4,14 +4,11 @@ import com.velocitymotors.carbooking.client.CreditCardClient;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
 import com.velocitymotors.carbooking.exception.PaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;
-import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.CreateBookingCommand;
-import com.velocitymotors.carbooking.model.PaymentMode;
 import com.velocitymotors.carbooking.persistance.BookingRepository;
 import com.velocitymotors.carbooking.persistance.InMemoryVehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -57,27 +54,17 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    @Transactional
-    public void confirmBankTransferPayment(String bookingId) {
-        bookingRepository.findById(bookingId).ifPresent(booking -> {
-            if (booking.getStatus() == BookingStatus.PENDING_PAYMENT
-                    && booking.getPaymentMode() == PaymentMode.BANK_TRANSFER) {
-                booking.confirm();
-                bookingRepository.save(booking);
-            }
-        });
-    }
-    @Transactional
-    public void cancelExpiredBankTransferBookings() {
-        LocalDate earliestPossibleRentalStartDate = LocalDate.now().plusDays(BANK_TRANSFER_PAYMENT_DEADLINE_DAYS);
-        bookingRepository.findPendingBankTransferBookingsStartingBefore(earliestPossibleRentalStartDate).forEach(booking -> {
-            booking.cancel();
-            bookingRepository.save(booking);
-        });
-    }
-
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
+    }
+
+    public boolean confirmBankTransferPayment(String bookingId) {
+        return bookingRepository.confirmPendingBankTransferBooking(bookingId);
+    }
+
+    public int cancelExpiredBankTransferBookings() {
+        LocalDate earliestBookingRentalStartDate = LocalDate.now().plusDays(BANK_TRANSFER_PAYMENT_DEADLINE_DAYS);
+        return bookingRepository.cancelPendingBankTransferBookingsStartingBefore(earliestBookingRentalStartDate);
     }
 
     // TODO: Need more validations?

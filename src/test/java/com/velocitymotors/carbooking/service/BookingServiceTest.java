@@ -7,10 +7,10 @@ import com.velocitymotors.carbooking.model.*;
 import com.velocitymotors.carbooking.persistance.BookingRepository;
 import com.velocitymotors.carbooking.persistance.InMemoryVehicleRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -111,46 +111,31 @@ class BookingServiceTest {
 
     @Test
     void confirmsPendingBankTransferBookingWhenPaymentIsReceived() {
-        Booking booking = Booking.builder()
-                .id("BKG0012345")
-                .paymentMode(PaymentMode.BANK_TRANSFER)
-                .status(BookingStatus.PENDING_PAYMENT)
-                .build();
-        given(bookingRepository.findById("BKG0012345")).willReturn(Optional.of(booking));
+        given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(true);
 
-        bookingService.confirmBankTransferPayment("BKG0012345");
+        assertThat(bookingService.confirmBankTransferPayment("BKG0012345")).isTrue();
 
-        assertThat(booking.getStatus()).isEqualTo(BookingStatus.CONFIRMED);
-        verify(bookingRepository).save(booking);
+        verify(bookingRepository).confirmPendingBankTransferBooking("BKG0012345");
     }
 
     @Test
     void ignoresPaymentForAlreadyConfirmedBooking() {
-        Booking booking = Booking.builder()
-                .id("BKG0012345")
-                .paymentMode(PaymentMode.BANK_TRANSFER)
-                .status(BookingStatus.CONFIRMED)
-                .build();
-        given(bookingRepository.findById("BKG0012345")).willReturn(Optional.of(booking));
+        // "already confirmed" vs "cancelled" is decided by the conditional UPDATE, so it is covered
+        // against a real database in BookingRepositoryTest
+        given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(false);
 
-        bookingService.confirmBankTransferPayment("BKG0012345");
-
-        verify(bookingRepository, never()).save(any());
+        assertThat(bookingService.confirmBankTransferPayment("BKG0012345")).isFalse();
     }
 
     @Test
-    void cancelsUnpaidBankTransferBookingsPastThePaymentDeadline() {
-        Booking booking = Booking.builder()
-                .id("BKG0012345")
-                .paymentMode(PaymentMode.BANK_TRANSFER)
-                .status(BookingStatus.PENDING_PAYMENT)
-                .build();
-        given(bookingRepository.findPendingBankTransferBookingsStartingBefore(any())).willReturn(List.of(booking));
+    void cancelsUnpaidBankTransferBookingsStartingWithinThePaymentDeadline() {
+        given(bookingRepository.cancelPendingBankTransferBookingsStartingBefore(any())).willReturn(3);
 
-        bookingService.cancelExpiredBankTransferBookings();
+        assertThat(bookingService.cancelExpiredBankTransferBookings()).isEqualTo(3);
 
-        assertThat(booking.getStatus()).isEqualTo(BookingStatus.CANCELLED);
-        verify(bookingRepository).save(booking);
+        ArgumentCaptor<LocalDate> cutoff = ArgumentCaptor.forClass(LocalDate.class);
+        verify(bookingRepository).cancelPendingBankTransferBookingsStartingBefore(cutoff.capture());
+        assertThat(cutoff.getValue()).isEqualTo(LocalDate.now().plusDays(2));
     }
 
     @Test

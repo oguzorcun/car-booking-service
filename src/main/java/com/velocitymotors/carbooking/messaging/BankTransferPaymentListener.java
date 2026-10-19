@@ -23,8 +23,12 @@ public class BankTransferPaymentListener {
         BankTransferPaymentEvent event = objectMapper.readValue(payload, BankTransferPaymentEvent.class);
         String bookingId = extractBookingId(event.transactionDetails());
 
-        bookingService.confirmBankTransferPayment(bookingId);
-        log.info("Processed bank transfer payment {} for booking {}", event.paymentId(), bookingId);
+        if (bookingService.confirmBankTransferPayment(bookingId)) {
+            log.info("Confirmed booking {} for bank transfer payment {}", bookingId, event.paymentId());
+        } else {
+            // duplicate event (already confirmed) or canceled booking (late payment) or not found
+            log.info("Ignored bank transfer payment {} for booking {}", event.paymentId(), bookingId);
+        }
     }
 
     private String extractBookingId(String transactionDetails) {
