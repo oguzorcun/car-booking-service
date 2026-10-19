@@ -1,6 +1,18 @@
 spring:
   application:
     name: car-booking-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres # local Postgres from docker-compose.yaml
+    username: postgres
+    password: postgres # must match POSTGRES_PASSWORD in docker-compose.yaml
+  jpa:
+    hibernate:
+      ddl-auto: update # Updates the db schema to match java entities where possible
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092} # Kafka brokers to connect to
+    consumer:
+      group-id: car-booking-service # consumer group registered on the broker; also the @KafkaListener groupId
+      auto-offset-reset: earliest # replay the topic from the start while the group has no committed offset
 
 springdoc:
   swagger-ui:
@@ -9,14 +21,6 @@ springdoc:
 credit-card-api:
   base-url: ${CREDIT_CARD_API_BASE_URL:http://localhost:9090/host/credit-card-api}
 
-kafka:
-  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-  consumer:
-    group-id: car-booking-service
-    auto-offset-reset: earliest
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-
 bank-transfer-payment:
-  topic: bank-transfer-payment-events
+  topic: bank-transfer-payment-events # Kafka topic for bank transfer payment events
   cancellation-schedule: "0 0 * * * *" # Runs every hour, on the hour (09:00, 10:00, 11:00)

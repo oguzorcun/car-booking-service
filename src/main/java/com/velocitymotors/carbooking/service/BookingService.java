@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +27,6 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final InMemoryVehicleRepository vehicleRepository;
 
-    @Transactional
     public Booking createBooking(CreateBookingCommand command) {
 
         validate(command);
@@ -54,6 +53,8 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
+    // TODO: Handle booking not found
+    // TODO: Handle duplicate payment event
     @Transactional
     public void confirmBankTransferPayment(String bookingId) {
         bookingRepository.findById(bookingId).ifPresent(booking -> {
@@ -74,6 +75,7 @@ public class BookingService {
         });
     }
 
+    // TODO: Need more validations?
     private void validate(CreateBookingCommand command) {
         if (!command.rentalEndDate().isAfter(command.rentalStartDate())) {
             throw new BookingValidationException("Rental end date must be after rental start date");
@@ -96,6 +98,6 @@ public class BookingService {
     }
 
     private String generateBookingId() {
-        return "BKG" + new Random().nextInt(9_000_000) + 1_000_000;
+        return "BKG" + ThreadLocalRandom.current().nextInt(1_000_000, 10_000_000);
     }
 }

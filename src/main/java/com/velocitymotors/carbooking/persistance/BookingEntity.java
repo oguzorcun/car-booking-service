@@ -32,13 +32,13 @@ public class BookingEntity {
 
     private LocalDate rentalEndDate;
 
-    @Enumerated(EnumType.STRING)
-    private VehicleCategory vehicleCategory;
+    private String paymentReference;
 
     @Enumerated(EnumType.STRING)
     private PaymentMode paymentMode;
 
-    private String paymentReference;
+    @Enumerated(EnumType.STRING)
+    private VehicleCategory vehicleCategory;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;

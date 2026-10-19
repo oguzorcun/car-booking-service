@@ -19,8 +19,10 @@ public class BankTransferPaymentListener {
             topics = "${bank-transfer-payment.topic}",
             groupId = "${spring.kafka.consumer.group-id}")
     public void onPaymentReceived(String payload) {
+
         BankTransferPaymentEvent event = objectMapper.readValue(payload, BankTransferPaymentEvent.class);
         String bookingId = extractBookingId(event.transactionDetails());
+
         bookingService.confirmBankTransferPayment(bookingId);
         log.info("Processed bank transfer payment {} for booking {}", event.paymentId(), bookingId);
     }

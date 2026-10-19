@@ -1,0 +1,9 @@
+{
+  "priority": 2,
+  "request": { "method": "POST", "url": "/host/credit-card-api/payment-status" },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "status": "APPROVED", "lastUpdateDate": "2026-10-16T10:00:00Z" }
+  }
+}
