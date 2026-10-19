@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.e2e;
+package com.velocitymotors.carbooking.integration;
 
 import com.velocitymotors.carbooking.generated.booking.model.BookingDetails;
 import com.velocitymotors.carbooking.generated.booking.model.BookingResponse;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - posts a booking via API
  * - reads it from the pgsql DB
  */
-class BookingEndToEndTest extends EndToEndTest {
+class BookingIntegrationTest extends IntegrationTest {
 
     @Autowired
     private BookingRepository bookingRepository;

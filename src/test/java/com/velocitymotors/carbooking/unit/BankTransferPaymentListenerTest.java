@@ -1,5 +1,7 @@
-package com.velocitymotors.carbooking.async;
+package com.velocitymotors.carbooking.unit;
 
+import com.velocitymotors.carbooking.async.BankTransferPaymentEvent;
+import com.velocitymotors.carbooking.async.BankTransferPaymentListener;
 import com.velocitymotors.carbooking.service.BookingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

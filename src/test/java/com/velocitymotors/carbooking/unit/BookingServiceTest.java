@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.service;
+package com.velocitymotors.carbooking.unit;
 
 import com.velocitymotors.carbooking.client.CreditCardClient;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
@@ -6,6 +6,7 @@ import com.velocitymotors.carbooking.exception.PaymentRejectedException;
 import com.velocitymotors.carbooking.model.*;
 import com.velocitymotors.carbooking.persistence.BookingRepository;
 import com.velocitymotors.carbooking.persistence.InMemoryVehicleRepository;
+import com.velocitymotors.carbooking.service.BookingService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 

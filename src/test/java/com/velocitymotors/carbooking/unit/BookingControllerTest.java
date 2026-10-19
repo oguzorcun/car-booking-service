@@ -1,5 +1,6 @@
-package com.velocitymotors.carbooking.api;
+package com.velocitymotors.carbooking.unit;
 
+import com.velocitymotors.carbooking.api.BookingController;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
 import com.velocitymotors.carbooking.exception.PaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;

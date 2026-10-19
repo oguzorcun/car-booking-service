@@ -1,22 +1,18 @@
-package com.velocitymotors.carbooking.persistence;
+package com.velocitymotors.carbooking.integration;
 
-import com.velocitymotors.carbooking.TestcontainersConfiguration;
 import com.velocitymotors.carbooking.model.Booking;
 import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.PaymentMode;
 import com.velocitymotors.carbooking.model.VehicleCategory;
+import com.velocitymotors.carbooking.persistence.BookingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Import(TestcontainersConfiguration.class)
-class BookingRepositoryTest {
+class BookingRepositoryTest extends IntegrationTest{
 
     @Autowired
     private BookingRepository bookingRepository;

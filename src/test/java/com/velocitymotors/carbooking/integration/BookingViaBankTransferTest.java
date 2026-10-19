@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.e2e;
+package com.velocitymotors.carbooking.integration;
 
 import com.velocitymotors.carbooking.async.BankTransferPaymentEvent;
 import com.velocitymotors.carbooking.generated.booking.model.BookingResponse;
@@ -27,7 +27,7 @@ import static org.awaitility.Awaitility.await;
  * - publishes a payment event to Kafka
  * - waits for the listener to confirm the booking
  */
-class BookingViaBankTransferEndToEndTest extends EndToEndTest {
+class BookingViaBankTransferTest extends IntegrationTest {
 
     @Autowired
     private BookingRepository bookingRepository;

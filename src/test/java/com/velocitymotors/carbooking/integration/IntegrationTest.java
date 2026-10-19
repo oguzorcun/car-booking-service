@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.e2e;
+package com.velocitymotors.carbooking.integration;
 
 import com.velocitymotors.carbooking.TestcontainersConfiguration;
 import com.velocitymotors.carbooking.generated.booking.model.BookingDetails;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
-abstract class EndToEndTest {
+abstract class IntegrationTest {
 
     @LocalServerPort
     private int port;
