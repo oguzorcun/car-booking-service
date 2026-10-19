@@ -55,6 +55,8 @@ public class BookingService {
 
     // TODO: Handle booking not found
     // TODO: Handle duplicate payment event
+    // TODO: Worth adding DLT for cases like malformed event?
+    // TODO: Nice-to-have: Add price to Booking.java and verify with BankTransferPaymentEvent.paymentAmount before confirming
     @Transactional
     public void confirmBankTransferPayment(String bookingId) {
         bookingRepository.findById(bookingId).ifPresent(booking -> {
