@@ -24,6 +24,12 @@ public class BookingRepository {
         return repository.findById(id).map(BookingRepository::toDomain);
     }
 
+    public List<Booking> findAll() {
+        return repository.findAll().stream()
+                .map(BookingRepository::toDomain)
+                .toList();
+    }
+
     public List<Booking> findPendingBankTransferBookingsStartingBefore(LocalDate date) {
         return repository
                 .findByStatusAndPaymentModeAndRentalStartDateLessThan(

@@ -1,5 +1,6 @@
 package com.velocitymotors.carbooking.api;
 
+import com.velocitymotors.carbooking.generated.booking.model.BookingDetails;
 import com.velocitymotors.carbooking.generated.booking.model.BookingResponse;
 import com.velocitymotors.carbooking.generated.booking.model.BookingStatus;
 import com.velocitymotors.carbooking.generated.booking.model.CreateBookingRequest;
@@ -26,5 +27,20 @@ final class BookingApiMapper {
         response.setBookingId(booking.getId());
         response.setStatus(BookingStatus.valueOf(booking.getStatus().name()));
         return response;
+    }
+
+    static BookingDetails toDetails(Booking booking) {
+        return new BookingDetails()
+                .bookingId(booking.getId())
+                .customerName(booking.getCustomerName())
+                .vehicleId(booking.getVehicleId())
+                .rentalStartDate(booking.getRentalStartDate())
+                .rentalEndDate(booking.getRentalEndDate())
+                .vehicleCategory(com.velocitymotors.carbooking.generated.booking.model.VehicleCategory
+                        .valueOf(booking.getVehicleCategory().name()))
+                .paymentMode(com.velocitymotors.carbooking.generated.booking.model.PaymentMode
+                        .valueOf(booking.getPaymentMode().name()))
+                .paymentReference(booking.getPaymentReference())
+                .status(BookingStatus.valueOf(booking.getStatus().name()));
     }
 }

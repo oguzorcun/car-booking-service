@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -67,7 +68,6 @@ public class BookingService {
             }
         });
     }
-
     @Transactional
     public void cancelExpiredBankTransferBookings() {
         LocalDate earliestPossibleRentalStartDate = LocalDate.now().plusDays(BANK_TRANSFER_PAYMENT_DEADLINE_DAYS);
@@ -75,6 +75,10 @@ public class BookingService {
             booking.cancel();
             bookingRepository.save(booking);
         });
+    }
+
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
     }
 
     // TODO: Need more validations?

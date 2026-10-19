@@ -11,26 +11,25 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 /**
- * Postgres and Kafka for tests, imported by the test classes that need them. @ServiceConnection
- * also keeps the tests off the docker-compose stack running on the same ports.
+ * Anno @ServiceConnection makes Spring to use created test container ports instead of ports on env vars
  */
 @TestConfiguration(proxyBeanMethods = false)
 class TestcontainersConfiguration {
 
     @Bean
-    @ServiceConnection // overrides the datasource properties from application.yaml
+    @ServiceConnection
     PostgreSQLContainer postgres() {
         return new PostgreSQLContainer("postgres:18-alpine"); // same image as docker-compose.yaml
     }
 
     @Bean
-    @ServiceConnection // overrides the kafka properties from application.yaml
+    @ServiceConnection
     KafkaContainer kafka() {
         return new KafkaContainer(DockerImageName.parse("apache/kafka:4.3.1")); // same image as docker-compose.yaml
     }
 
     @Bean
     NewTopic bankTransferPaymentEvents(@Value("${bank-transfer-payment.topic}") String topic) {
-        return TopicBuilder.name(topic).partitions(1).replicas(1).build(); // the listener subscribes at startup, so the topic has to exist before the first event
+        return TopicBuilder.name(topic).partitions(1).replicas(1).build();
     }
 }

@@ -153,6 +153,15 @@ class BookingServiceTest {
         verify(bookingRepository).save(booking);
     }
 
+    @Test
+    void returnsAllBookingsFromTheRepository() {
+        Booking first = Booking.builder().id("BKG0000001").status(BookingStatus.CONFIRMED).build();
+        Booking second = Booking.builder().id("BKG0000002").status(BookingStatus.PENDING_PAYMENT).build();
+        given(bookingRepository.findAll()).willReturn(List.of(first, second));
+
+        assertThat(bookingService.getAllBookings()).containsExactly(first, second);
+    }
+
     private static CreateBookingCommand command(PaymentMode paymentMode) {
         return new CreateBookingCommand(
                 "John Doe",

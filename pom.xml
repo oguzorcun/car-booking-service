@@ -109,6 +109,7 @@
                         <useJackson3>true</useJackson3> <!-- Jackson 3; needs useSpringBoot4 -->
                         <openApiNullable>false</openApiNullable> <!-- plain fields, no JsonNullable wrappers -->
                         <hideGenerationTimestamp>true</hideGenerationTimestamp> <!-- no timestamp header, keeps diffs stable -->
+                        <cleanupOutput>true</cleanupOutput>
                     </configOptions>
                 </configuration>
                 <executions>

@@ -10,6 +10,21 @@ tags:
     description: Car booking operations
 paths:
   /bookings:
+    get:
+      tags:
+        - Booking
+      operationId: getAllBookings
+      summary: List all car bookings
+      description: Returns every stored booking
+      responses:
+        '200':
+          description: All bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingDetails'
     post:
       tags:
         - Booking
@@ -82,6 +97,36 @@ components:
         bookingId:
           type: string
           example: BKG0012345
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+
+    BookingDetails:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          example: BKG0012345
+        customerName:
+          type: string
+          example: John Doe
+        vehicleId:
+          type: string
+          example: VEH-001
+        rentalStartDate:
+          type: string
+          format: date
+          example: '2026-11-01'
+        rentalEndDate:
+          type: string
+          format: date
+          example: '2026-11-05'
+        vehicleCategory:
+          $ref: '#/components/schemas/VehicleCategory'
+        paymentMode:
+          $ref: '#/components/schemas/PaymentMode'
+        paymentReference:
+          type: string
+          example: DL123456789
         status:
           $ref: '#/components/schemas/BookingStatus'
 
