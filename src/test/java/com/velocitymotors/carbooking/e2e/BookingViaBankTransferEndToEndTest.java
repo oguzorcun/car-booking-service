@@ -1,7 +1,7 @@
 package com.velocitymotors.carbooking.e2e;
 
+import com.velocitymotors.carbooking.async.BankTransferPaymentEvent;
 import com.velocitymotors.carbooking.generated.booking.model.BookingResponse;
-import com.velocitymotors.carbooking.messaging.BankTransferPaymentEvent;
 import com.velocitymotors.carbooking.model.Booking;
 import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.PaymentMode;

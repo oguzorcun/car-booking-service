@@ -1,9 +1,10 @@
-package com.velocitymotors.carbooking.messaging;
+package com.velocitymotors.carbooking.async;
 
 import com.velocitymotors.carbooking.service.BookingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.ObjectMapper;
+
+import java.math.BigDecimal;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,21 +17,19 @@ class BankTransferPaymentListenerTest {
 
     @BeforeEach
     void setUp() {
-        listener = new BankTransferPaymentListener(bookingService, new ObjectMapper());
+        listener = new BankTransferPaymentListener(bookingService);
     }
 
     @Test
     void confirmsBookingIdExtractedFromTransactionDetails() {
-        String payload = """
-                {
-                  "paymentId": "PAY-1",
-                  "senderAccountNumber": "NL91ABNA0417164300",
-                  "paymentAmount": 1250.00,
-                  "transactionDetails": "TXN987654321 BKG0012345"
-                }
-                """;
+        BankTransferPaymentEvent event = BankTransferPaymentEvent.builder()
+                .paymentId("BANK-PAY-ID-1")
+                .senderAccountNumber("IBAN-NUMBER-1")
+                .paymentAmount(new BigDecimal("500.00"))
+                .transactionDetails("TXN123456789 BKG0012345")
+                .build();
 
-        listener.onPaymentReceived(payload);
+        listener.onPaymentReceived(event);
 
         verify(bookingService).confirmBankTransferPayment("BKG0012345");
     }

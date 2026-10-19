@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.messaging;
+package com.velocitymotors.carbooking.async;
 
 import lombok.Builder;
 

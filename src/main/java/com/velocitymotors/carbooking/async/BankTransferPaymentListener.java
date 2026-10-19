@@ -1,11 +1,10 @@
-package com.velocitymotors.carbooking.messaging;
+package com.velocitymotors.carbooking.async;
 
 import com.velocitymotors.carbooking.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
@@ -13,14 +12,12 @@ import tools.jackson.databind.ObjectMapper;
 public class BankTransferPaymentListener {
 
     private final BookingService bookingService;
-    private final ObjectMapper objectMapper;
 
     @KafkaListener(
             topics = "${bank-transfer-payment.topic}",
             groupId = "${spring.kafka.consumer.group-id}")
-    public void onPaymentReceived(String payload) {
+    public void onPaymentReceived(BankTransferPaymentEvent event) {
 
-        BankTransferPaymentEvent event = objectMapper.readValue(payload, BankTransferPaymentEvent.class);
         String bookingId = extractBookingId(event.transactionDetails());
 
         if (bookingService.confirmBankTransferPayment(bookingId)) {
