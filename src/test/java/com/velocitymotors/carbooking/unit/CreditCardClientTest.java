@@ -2,7 +2,7 @@ package com.velocitymotors.carbooking.unit;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.velocitymotors.carbooking.client.CreditCardClient;
-import com.velocitymotors.carbooking.exception.PaymentRejectedException;
+import com.velocitymotors.carbooking.exception.CreditCardPaymentRejectedException;
 import com.velocitymotors.carbooking.generated.creditcard.ApiClient;
 import com.velocitymotors.carbooking.generated.creditcard.api.PaymentStatusApi;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +43,6 @@ class CreditCardClientTest {
     @Test
     void throwsWhenCreditCardServiceFails() {
         assertThatThrownBy(() -> client.isPaymentApproved("FAIL-1"))
-                .isInstanceOf(PaymentRejectedException.class);
+                .isInstanceOf(CreditCardPaymentRejectedException.class);
     }
 }

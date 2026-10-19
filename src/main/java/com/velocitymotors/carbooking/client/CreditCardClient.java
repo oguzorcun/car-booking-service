@@ -1,6 +1,6 @@
 package com.velocitymotors.carbooking.client;
 
-import com.velocitymotors.carbooking.exception.PaymentRejectedException;
+import com.velocitymotors.carbooking.exception.CreditCardPaymentRejectedException;
 import com.velocitymotors.carbooking.generated.creditcard.api.PaymentStatusApi;
 import com.velocitymotors.carbooking.generated.creditcard.model.PaymentStatus;
 import com.velocitymotors.carbooking.generated.creditcard.model.PaymentStatusResponse;
@@ -22,7 +22,7 @@ public class CreditCardClient {
             PaymentStatusResponse response = paymentStatusApi.paymentStatusPost(request);
             return response != null && response.getStatus() == PaymentStatus.APPROVED;
         } catch (RestClientException ex) {
-            throw new PaymentRejectedException(
+            throw new CreditCardPaymentRejectedException(
                     "Credit card payment validation failed for reference " + paymentReference);
         }
     }

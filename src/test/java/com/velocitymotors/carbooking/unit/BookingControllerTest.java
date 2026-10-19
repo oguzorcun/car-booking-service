@@ -2,7 +2,7 @@ package com.velocitymotors.carbooking.unit;
 
 import com.velocitymotors.carbooking.api.BookingController;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
-import com.velocitymotors.carbooking.exception.PaymentRejectedException;
+import com.velocitymotors.carbooking.exception.CreditCardPaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;
 import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.PaymentMode;
@@ -102,7 +102,7 @@ class BookingControllerTest {
     void returnsUnprocessableEntityWhenPaymentIsRejected() throws Exception {
         var message = "Credit card payment was not approved";
         given(bookingService.createBooking(any()))
-                .willThrow(new PaymentRejectedException(message));
+                .willThrow(new CreditCardPaymentRejectedException(message));
 
         mockMvc.perform(post("/bookings").contentType(MediaType.APPLICATION_JSON).content(REQUEST))
                 .andExpect(status().isUnprocessableContent())

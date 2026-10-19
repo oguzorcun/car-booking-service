@@ -2,7 +2,7 @@ package com.velocitymotors.carbooking.unit;
 
 import com.velocitymotors.carbooking.client.CreditCardClient;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
-import com.velocitymotors.carbooking.exception.PaymentRejectedException;
+import com.velocitymotors.carbooking.exception.CreditCardPaymentRejectedException;
 import com.velocitymotors.carbooking.model.*;
 import com.velocitymotors.carbooking.persistence.BookingRepository;
 import com.velocitymotors.carbooking.persistence.InMemoryVehicleRepository;
@@ -61,7 +61,7 @@ class BookingServiceTest {
         given(creditCardPaymentClient.isPaymentApproved(PAYMENT_REFERENCE)).willReturn(false);
 
         assertThatThrownBy(() -> bookingService.createBooking(command(PaymentMode.CREDIT_CARD)))
-                .isInstanceOf(PaymentRejectedException.class);
+                .isInstanceOf(CreditCardPaymentRejectedException.class);
         verify(bookingRepository, never()).save(any());
     }
 
@@ -114,7 +114,7 @@ class BookingServiceTest {
     void confirmsPendingBankTransferBookingWhenPaymentIsReceived() {
         given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(1);
 
-        assertThat(bookingService.confirmBankTransferPayment("BKG0012345")).isTrue();
+        assertThat(bookingService.confirmPendingBankTransferBooking("BKG0012345")).isTrue();
 
         verify(bookingRepository).confirmPendingBankTransferBooking("BKG0012345");
     }
@@ -125,7 +125,7 @@ class BookingServiceTest {
         // against a real database in BookingRepositoryTest
         given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(0);
 
-        assertThat(bookingService.confirmBankTransferPayment("BKG0012345")).isFalse();
+        assertThat(bookingService.confirmPendingBankTransferBooking("BKG0012345")).isFalse();
     }
 
     @Test

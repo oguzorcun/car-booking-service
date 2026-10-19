@@ -2,7 +2,7 @@ package com.velocitymotors.carbooking.service;
 
 import com.velocitymotors.carbooking.client.CreditCardClient;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
-import com.velocitymotors.carbooking.exception.PaymentRejectedException;
+import com.velocitymotors.carbooking.exception.CreditCardPaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;
 import com.velocitymotors.carbooking.model.CreateBookingCommand;
 import com.velocitymotors.carbooking.persistence.BookingRepository;
@@ -44,7 +44,7 @@ public class BookingService {
             case DIGITAL_WALLET -> booking.confirm();
             case CREDIT_CARD -> {
                 if (!creditCardClient.isPaymentApproved(booking.getPaymentReference())) {
-                    throw new PaymentRejectedException(
+                    throw new CreditCardPaymentRejectedException(
                             "Credit card payment was rejected for reference " + booking.getPaymentReference());
                 }
                 booking.confirm();
@@ -58,7 +58,7 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public boolean confirmBankTransferPayment(String bookingId) {
+    public boolean confirmPendingBankTransferBooking(String bookingId) {
         return bookingRepository.confirmPendingBankTransferBooking(bookingId) == 1;
     }
 
