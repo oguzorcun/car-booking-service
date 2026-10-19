@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.persistance;
+package com.velocitymotors.carbooking.persistence;
 
 import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.PaymentMode;

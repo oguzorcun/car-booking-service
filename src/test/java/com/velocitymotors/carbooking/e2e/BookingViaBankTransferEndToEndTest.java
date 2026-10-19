@@ -6,7 +6,7 @@ import com.velocitymotors.carbooking.model.Booking;
 import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.PaymentMode;
 import com.velocitymotors.carbooking.model.VehicleCategory;
-import com.velocitymotors.carbooking.persistance.BookingRepository;
+import com.velocitymotors.carbooking.persistence.BookingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

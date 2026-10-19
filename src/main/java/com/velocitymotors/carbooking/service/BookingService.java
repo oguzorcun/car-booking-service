@@ -5,8 +5,8 @@ import com.velocitymotors.carbooking.exception.BookingValidationException;
 import com.velocitymotors.carbooking.exception.PaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;
 import com.velocitymotors.carbooking.model.CreateBookingCommand;
-import com.velocitymotors.carbooking.persistance.BookingRepository;
-import com.velocitymotors.carbooking.persistance.InMemoryVehicleRepository;
+import com.velocitymotors.carbooking.persistence.BookingRepository;
+import com.velocitymotors.carbooking.persistence.InMemoryVehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

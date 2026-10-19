@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking.persistance;
+package com.velocitymotors.carbooking.persistence;
 
 import org.springframework.stereotype.Repository;
 
