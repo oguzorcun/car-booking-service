@@ -112,7 +112,7 @@ class BookingServiceTest {
 
     @Test
     void confirmsPendingBankTransferBookingWhenPaymentIsReceived() {
-        given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(true);
+        given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(1);
 
         assertThat(bookingService.confirmBankTransferPayment("BKG0012345")).isTrue();
 
@@ -123,7 +123,7 @@ class BookingServiceTest {
     void ignoresPaymentForAlreadyConfirmedBooking() {
         // "already confirmed" vs "cancelled" is decided by the conditional UPDATE, so it is covered
         // against a real database in BookingRepositoryTest
-        given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(false);
+        given(bookingRepository.confirmPendingBankTransferBooking("BKG0012345")).willReturn(0);
 
         assertThat(bookingService.confirmBankTransferPayment("BKG0012345")).isFalse();
     }

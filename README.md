@@ -33,7 +33,7 @@ REST API served on http://localhost:8080
 ## Decisions
 - API-spec first approach, single source of truth, less brittle APIs
 - Auto generates car-booking-api driver classes and credit-card-api client classes using spring maven plugin
-- Maps at boundaries to prevent leaking generated/entity classes into domain layer
+- Maps at boundaries to prevent leaking generated classes into domain layer
 
 ## Assumptions
 
@@ -47,9 +47,9 @@ REST API served on http://localhost:8080
   - finer-grained response handling
 - Security, observability for car-booking-api
   - authentication and rate limiting
-  - logging/metrics/health etc
+  - logging/metrics/health
 - Kafka:
-  - Handle booking not found (now silently acks the event)
-  - Handle duplicate payment event (kinda already handled by BookingStatus check but not a guarantee)
-  - Add DLT for cases like malformed event
+  - Handle duplicate payment event by id (kinda already handled by BookingStatus check but not a guarantee)
+  - Add DLT for cases like malformed event ser/de error
 - Add price to CreateBookingRequest and verify with BankTransferPaymentEvent.paymentAmount before confirming a booking
+- Add real vehicle repo

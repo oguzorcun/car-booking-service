@@ -59,7 +59,7 @@ public class BookingService {
     }
 
     public boolean confirmBankTransferPayment(String bookingId) {
-        return bookingRepository.confirmPendingBankTransferBooking(bookingId);
+        return bookingRepository.confirmPendingBankTransferBooking(bookingId) == 1;
     }
 
     public int cancelExpiredBankTransferBookings() {

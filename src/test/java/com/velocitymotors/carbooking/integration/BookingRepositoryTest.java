@@ -21,7 +21,7 @@ class BookingRepositoryTest extends IntegrationTest{
     void confirmsAPendingBankTransferBooking() {
         Booking booking = savePendingBankTransferBooking("BKG-CAS0001");
 
-        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isTrue();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(1);
 
         assertThat(statusOf(booking.getId())).isEqualTo(BookingStatus.CONFIRMED);
     }
@@ -29,9 +29,9 @@ class BookingRepositoryTest extends IntegrationTest{
     @Test
     void doesNotConfirmTheSameBookingTwice() {
         Booking booking = savePendingBankTransferBooking("BKG-CAS0002");
-        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isTrue();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(1);
 
-        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isFalse();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(0);
 
         assertThat(statusOf(booking.getId())).isEqualTo(BookingStatus.CONFIRMED);
     }
@@ -42,7 +42,7 @@ class BookingRepositoryTest extends IntegrationTest{
         booking.cancel();
         bookingRepository.save(booking);
 
-        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isFalse();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(0);
 
         assertThat(statusOf(booking.getId())).isEqualTo(BookingStatus.CANCELLED);
     }
@@ -61,12 +61,12 @@ class BookingRepositoryTest extends IntegrationTest{
                 .status(BookingStatus.PENDING_PAYMENT)
                 .build());
 
-        assertThat(bookingRepository.confirmPendingBankTransferBooking("BKG-CAS0004")).isFalse();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking("BKG-CAS0004")).isEqualTo(0);
     }
 
     @Test
     void doesNotConfirmAnUnknownBooking() {
-        assertThat(bookingRepository.confirmPendingBankTransferBooking("BKG-CAS0005")).isFalse();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking("BKG-CAS0005")).isEqualTo(0);
     }
 
     @Test
@@ -74,7 +74,7 @@ class BookingRepositoryTest extends IntegrationTest{
         savePendingBankTransferBooking("BKG-CAS0006", LocalDate.now().plusDays(1)); // inside, should go
         savePendingBankTransferBooking("BKG-CAS0007", LocalDate.now().plusDays(5)); // starts later, stays
         Booking alreadyPaid = savePendingBankTransferBooking("BKG-CAS0008", LocalDate.now().plusDays(1));
-        assertThat(bookingRepository.confirmPendingBankTransferBooking(alreadyPaid.getId())).isTrue();
+        assertThat(bookingRepository.confirmPendingBankTransferBooking(alreadyPaid.getId())).isEqualTo(1);
 
         int cancelled = bookingRepository
                 .cancelPendingBankTransferBookingsStartingBefore(LocalDate.now().plusDays(2));
