@@ -46,18 +46,17 @@ public class BookingService {
         switch (booking.getPaymentMode()) {
             case DIGITAL_WALLET -> booking.confirm();
             case CREDIT_CARD -> {
-                if (validateCreditCardPayment(booking.getPaymentReference()))
-                    booking.confirm();
+                if (!creditCardClient.isPaymentApproved(booking.getPaymentReference())) {
+                    throw new PaymentRejectedException(
+                            "Credit card payment was rejected for reference " + booking.getPaymentReference());
+                }
+                booking.confirm();
             }
             case BANK_TRANSFER -> booking.awaitPayment();
         }
         return bookingRepository.save(booking);
     }
 
-    // TODO: Handle booking not found
-    // TODO: Handle duplicate payment event
-    // TODO: Worth adding DLT for cases like malformed event?
-    // TODO: Nice-to-have: Add price to Booking.java and verify with BankTransferPaymentEvent.paymentAmount before confirming
     @Transactional
     public void confirmBankTransferPayment(String bookingId) {
         bookingRepository.findById(bookingId).ifPresent(booking -> {
@@ -91,15 +90,6 @@ public class BookingService {
         }
         if (!vehicleRepository.existsById(command.vehicleId())) {
             throw new BookingValidationException("Invalid vehicle id: " + command.vehicleId());
-        }
-    }
-
-    private boolean validateCreditCardPayment(String paymentReference) {
-        if (creditCardClient.isPaymentApproved(paymentReference)) {
-            return true;
-        } else {
-            throw new PaymentRejectedException(
-                    "Credit card payment was rejected for reference " + paymentReference);
         }
     }
 
