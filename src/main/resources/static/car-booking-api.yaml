@@ -4,7 +4,7 @@ info:
   description: API for creating car rental bookings
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: /
 tags:
   - name: Booking
     description: Car booking operations
