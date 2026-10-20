@@ -62,7 +62,7 @@ class BookingIntegrationTest extends IntegrationTest {
         BookingDetails listed = Arrays.stream(bookings)
                 .filter(booking -> booking.getBookingId().equals(bookingId))
                 .findFirst()
-                .get();
+                .orElseThrow();
         // mapping of other fields covered by BookingControllerTest
         assertThat(listed.getRentalStartDate()).isEqualTo(rentalStartDate);
     }

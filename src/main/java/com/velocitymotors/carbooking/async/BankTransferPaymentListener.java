@@ -11,9 +11,7 @@ public class BankTransferPaymentListener {
 
     private final BankTransferPaymentService bankTransferPaymentService;
 
-    @KafkaListener(
-            topics = "${bank-transfer-payment.topic}",
-            groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${bank-transfer-payment.topic}")
     public void onPaymentReceived(BankTransferPaymentEvent event) {
         bankTransferPaymentService.confirmBooking(event);
     }

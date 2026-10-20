@@ -15,7 +15,7 @@ docker compose up -d
 # Build and run (check JAVA_HOME is 21)
 mvn spring-boot:run
 ```
-REST API served on http://localhost:8080
+REST API with Swagger served on http://localhost:8080
 
 ## Functionality
 - **Serves a REST API** 

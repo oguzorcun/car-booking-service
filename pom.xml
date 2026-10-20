@@ -72,7 +72,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-webmvc-test</artifactId>
-            <version>4.1.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -129,9 +128,9 @@
                                 <useTags>true</useTags> <!-- one interface per OpenAPI tag (BookingApi), not DefaultApi -->
                                 <requestMappingMode>api_interface</requestMappingMode> <!-- class-level @RequestMapping on the interface -->
                                 <useResponseEntity>false</useResponseEntity> <!-- return bare models; status via @ResponseStatus -->
-                                <useBeanValidation>false</useBeanValidation> <!-- no @Valid/@Validated at the web layer; the service validates. @NotNull on required fields stays -->
-                                <documentationProvider>none</documentationProvider> <!-- no springdoc annotations; UI reads the YAML. Also pins annotationLibrary to none -->
-                                <basePackage>com.velocitymotors.carbooking.generated.booking</basePackage> <!-- keep generated classes out of org.openapitools -->
+                                <useBeanValidation>true</useBeanValidation> <!-- @Valid on the request body, so the spec's required fields are enforced; business rules stay in the service -->
+                                <documentationProvider>none</documentationProvider> <!-- no springdoc annotations; UI reads the YAML-->
+                                <basePackage>com.velocitymotors.carbooking.generated.booking</basePackage>
                                 <configPackage>com.velocitymotors.carbooking.generated.booking.configuration</configPackage>
                             </configOptions>
                         </configuration>

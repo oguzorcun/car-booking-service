@@ -23,10 +23,9 @@ final class BookingApiMapper {
     }
 
     static BookingResponse toResponse(Booking booking) {
-        BookingResponse response = new BookingResponse();
-        response.setBookingId(booking.getId());
-        response.setStatus(BookingStatus.valueOf(booking.getStatus().name()));
-        return response;
+        return new BookingResponse()
+                .bookingId(booking.getId())
+                .status(BookingStatus.valueOf(booking.getStatus().name()));
     }
 
     static BookingDetails toDetails(Booking booking) {

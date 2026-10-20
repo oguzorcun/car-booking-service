@@ -11,7 +11,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092} # Kafka brokers to connect to
     consumer:
-      group-id: car-booking-service # consumer group registered on the broker; also the @KafkaListener groupId
+      group-id: car-booking-service # consumer group registered on the broker
       auto-offset-reset: earliest # replay the topic from the start while the group has no committed offset
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer

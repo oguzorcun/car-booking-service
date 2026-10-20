@@ -99,6 +99,24 @@ class BookingControllerTest {
     }
 
     @Test
+    void returnsBadRequestWhenARequiredFieldIsMissing() throws Exception {
+        String request = """
+                {
+                  "vehicleId": "VEH-001",
+                  "rentalStartDate": "2026-11-01",
+                  "rentalEndDate": "2026-11-05",
+                  "vehicleCategory": "SUV",
+                  "paymentMode": "DIGITAL_WALLET",
+                  "paymentReference": "PAY-REF-1"
+                }
+                """;
+
+        mockMvc.perform(post("/bookings").contentType(MediaType.APPLICATION_JSON).content(request))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("customerName must not be null"));
+    }
+
+    @Test
     void returnsUnprocessableEntityWhenPaymentIsRejected() throws Exception {
         var message = "Credit card payment was not approved";
         given(bookingService.createBooking(any()))
