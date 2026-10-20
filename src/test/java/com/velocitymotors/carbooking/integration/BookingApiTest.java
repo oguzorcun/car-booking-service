@@ -18,8 +18,8 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * - posts a booking via API
- * - reads it from the pgsql DB
+ * 1. posts a booking via API
+ * 2. reads it from the pgsql DB
  */
 class BookingApiTest extends AbstractIntegrationTest {
 

@@ -23,9 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 /**
- * - posts a bank transfer booking via API
- * - publishes a payment event to Kafka
- * - waits for the listener to confirm the booking
+ * 1. posts a bank transfer booking via API
+ * 2. publishes a payment event to Kafka
+ * 3. waits for the listener to confirm the booking
  */
 class BankTransferPaymentFlowTest extends AbstractIntegrationTest {
 

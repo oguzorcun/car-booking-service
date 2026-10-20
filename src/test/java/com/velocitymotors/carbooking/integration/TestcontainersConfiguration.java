@@ -11,7 +11,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 /**
- * Anno @ServiceConnection makes Spring use created test container ports instead of ports on env vars
+ * Annotation @ServiceConnection makes Spring use created test container ports instead of ports on app config
  */
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
