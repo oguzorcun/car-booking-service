@@ -12,7 +12,7 @@ public class KafkaListenerConfiguration {
     /**
      * Transient failures (e.g. db down) are retried 3 times, 1s apart
      * Malformed events are skipped
-     * Undeserializable payloads are also skipped (ErrorHandlingDeserializer in app rrops)
+     * Undeserializable payloads are also skipped (ErrorHandlingDeserializer in app config)
      */
     @Bean
     public DefaultErrorHandler kafkaErrorHandler() {
