@@ -23,9 +23,10 @@ REST API with Swagger served on http://localhost:8080
 
 - **Consumes a kafka topic** 
   - `bank-transfer-payment-events` and confirms pending bookings 
-    - event:    `BankTransferPaymentEvent.transactionDetails`
-    - format:   `<TxnRef(12 chars)> <BookingId(10 chars)>`
-    - example   `TXN987654321 BKG0012345`
+    - event:    `BankTransferPaymentEvent`
+      - `BankTransferPaymentEvent.transactionDetails`:
+      - format:   `<TxnRef(12 chars)> <BookingId(10 chars)>`
+      - example   `TXN987654321 BKG0012345`
 
 - **Runs a scheduled job**
   - cancels bookings that are still `PENDING_PAYMENT` less than 48 hours before rental start
