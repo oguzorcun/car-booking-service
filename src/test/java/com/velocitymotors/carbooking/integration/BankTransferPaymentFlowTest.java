@@ -27,7 +27,7 @@ import static org.awaitility.Awaitility.await;
  * - publishes a payment event to Kafka
  * - waits for the listener to confirm the booking
  */
-class BookingViaBankTransferTest extends IntegrationTest {
+class BankTransferPaymentFlowTest extends AbstractIntegrationTest {
 
     @Autowired
     private BookingRepository bookingRepository;

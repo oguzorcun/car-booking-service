@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - posts a booking via API
  * - reads it from the pgsql DB
  */
-class BookingIntegrationTest extends IntegrationTest {
+class BookingApiTest extends AbstractIntegrationTest {
 
     @Autowired
     private BookingRepository bookingRepository;

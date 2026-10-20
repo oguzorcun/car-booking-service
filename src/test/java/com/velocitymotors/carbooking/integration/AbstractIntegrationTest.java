@@ -19,7 +19,7 @@ import java.time.LocalDate;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
-abstract class IntegrationTest {
+abstract class AbstractIntegrationTest {
 
     @LocalServerPort
     private int port;

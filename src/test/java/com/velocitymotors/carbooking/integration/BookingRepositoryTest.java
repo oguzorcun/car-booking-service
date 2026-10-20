@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookingRepositoryTest extends IntegrationTest{
+class BookingRepositoryTest extends AbstractIntegrationTest {
 
     @Autowired
     private BookingRepository bookingRepository;
