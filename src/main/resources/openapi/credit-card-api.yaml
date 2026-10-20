@@ -65,7 +65,7 @@ components:
         lastUpdateDate:
           type: string
           description: last updated at
-          format: datetime
+          format: date-time
           example: 2017-07-21T17:32:28Z
         status:
           $ref: "#/components/schemas/PaymentStatus"

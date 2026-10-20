@@ -65,7 +65,7 @@ class BookingViaBankTransferTest extends IntegrationTest {
 
         // wait until the simulated event is processed by the listener
         await()
-                .atMost(Duration.ofSeconds(10))
+                .atMost(Duration.ofSeconds(5))
                 .untilAsserted(() -> {
                     Booking booking = bookingRepository.findById(bookingId).orElseThrow();
                     assertThat(booking.getStatus()).isEqualTo(BookingStatus.CONFIRMED);

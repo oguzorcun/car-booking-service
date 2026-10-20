@@ -24,7 +24,7 @@ public class BankTransferPaymentService {
         if (bookingService.confirmPendingBankTransferBooking(bookingId)) {
             log.info("Confirmed booking {} for bank transfer payment {}", bookingId, event.paymentId());
         } else {
-            // duplicate event (already confirmed) or canceled booking (late payment) or not found
+            // duplicate event (already confirmed) OR canceled booking (late payment) OR booking not found
             log.info("Ignored bank transfer payment {} for booking {}", event.paymentId(), bookingId);
         }
     }
