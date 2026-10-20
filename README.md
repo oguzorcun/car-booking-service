@@ -52,5 +52,6 @@ REST API with Swagger served on http://localhost:8080
 - Kafka:
   - Handle duplicate payment event by id (kinda already handled by BookingStatus check but not a guarantee)
   - Add DLT for cases like malformed event ser/de error
+  - finer-grained error handling
 - Add price to CreateBookingRequest and verify with BankTransferPaymentEvent.paymentAmount before confirming a booking
 - Add real vehicle repo

@@ -47,9 +47,8 @@ class BookingViaBankTransferTest extends IntegrationTest {
         String request = bookingRequest("Jane Roe", "VEH-002", rentalStartDate, rentalStartDate.plusDays(3),
                 VehicleCategory.COMPACT, PaymentMode.BANK_TRANSFER, "BT-REF-1");
 
-        ResponseEntity<BookingResponse> response = postBooking(request);
-
         // bank transfer booking is first created as pending payment
+        ResponseEntity<BookingResponse> response = postBooking(request);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody().getStatus()).hasToString(BookingStatus.PENDING_PAYMENT.name());
         String bookingId = response.getBody().getBookingId();

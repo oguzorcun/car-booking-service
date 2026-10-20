@@ -23,10 +23,11 @@ class KafkaListenerConfigurationTest {
     private static final ConsumerRecord<String, String> RECORD =
             new ConsumerRecord<>("bank-transfer-payment-events", 0, 42L, "key", "payload");
 
-    private final DefaultErrorHandler errorHandler = new KafkaListenerConfiguration().kafkaErrorHandler();
+    private final DefaultErrorHandler errorHandler = new KafkaListenerConfiguration().kafkaErrorHandler(); // custom error handler from application
+    private final RecordingRetryListener retries = new RecordingRetryListener(); // custom retry listener to record retry attemps
+
     private final Consumer<?, ?> consumer = mock(Consumer.class);
     private final MessageListenerContainer container = mock(MessageListenerContainer.class);
-    private final RecordingRetryListener retries = new RecordingRetryListener();
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,7 @@ class KafkaListenerConfigurationTest {
 
     @Test
     void skipsValidationFailureImmediatelyWithoutRetrying() {
-        // the listener adapter wraps whatever the service threw, classification has to look at the cause
+        // the listener adapter wraps whatever the service threw
         Exception thrown = new ListenerExecutionFailedException("Listener failed",
                 new BankTransferPaymentEventValidationException("Transaction details without a booking id"));
 
