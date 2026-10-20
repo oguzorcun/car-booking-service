@@ -10,9 +10,9 @@ import org.springframework.util.backoff.FixedBackOff;
 public class KafkaListenerConfiguration {
 
     /**
-     * Transient failures (database down, optimistic lock conflict) are retried 3 times, 1s apart
-     * Malformed events are skipped immediately and logged
-     * Undeserializable payloads are also skipped (ErrorHandlingDeserializer)
+     * Transient failures (e.g. db down) are retried 3 times, 1s apart
+     * Malformed events are skipped
+     * Undeserializable payloads are also skipped (ErrorHandlingDeserializer in app rrops)
      */
     @Bean
     public DefaultErrorHandler kafkaErrorHandler() {

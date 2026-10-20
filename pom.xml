@@ -32,6 +32,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId> <!-- Not used directly, needed for restclient + wiremock-->
+        </dependency>
+
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
@@ -143,7 +148,7 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/openapi/credit-card-api.yaml</inputSpec>
                             <generatorName>java</generatorName>
-                            <library>resttemplate</library>
+                            <library>restclient</library>
                             <output>${project.build.directory}/generated-sources/openapi/credit-card</output>
                             <invokerPackage>com.velocitymotors.carbooking.generated.creditcard</invokerPackage>
                             <apiPackage>com.velocitymotors.carbooking.generated.creditcard.api</apiPackage>
