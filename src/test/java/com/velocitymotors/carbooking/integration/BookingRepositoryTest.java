@@ -22,17 +22,15 @@ class BookingRepositoryTest extends IntegrationTest{
         Booking booking = savePendingBankTransferBooking("BKG-CAS0001");
 
         assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(1);
-
         assertThat(statusOf(booking.getId())).isEqualTo(BookingStatus.CONFIRMED);
     }
 
     @Test
     void doesNotConfirmTheSameBookingTwice() {
         Booking booking = savePendingBankTransferBooking("BKG-CAS0002");
+
         assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(1);
-
         assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(0);
-
         assertThat(statusOf(booking.getId())).isEqualTo(BookingStatus.CONFIRMED);
     }
 
@@ -43,22 +41,13 @@ class BookingRepositoryTest extends IntegrationTest{
         bookingRepository.save(booking);
 
         assertThat(bookingRepository.confirmPendingBankTransferBooking(booking.getId())).isEqualTo(0);
-
         assertThat(statusOf(booking.getId())).isEqualTo(BookingStatus.CANCELLED);
     }
 
     @Test
     void doesNotConfirmAPendingBookingThatIsNotABankTransfer() {
-        bookingRepository.save(Booking.builder()
-                .id("BKG-CAS0004")
-                .customerName("John Doe")
-                .vehicleId("VEH-001")
-                .rentalStartDate(LocalDate.now().plusDays(10))
-                .rentalEndDate(LocalDate.now().plusDays(13))
-                .vehicleCategory(VehicleCategory.SUV)
+        bookingRepository.save(pendingBooking("BKG-CAS0004")
                 .paymentMode(PaymentMode.DIGITAL_WALLET)
-                .paymentReference("PAY-REF-CAS0004")
-                .status(BookingStatus.PENDING_PAYMENT)
                 .build());
 
         assertThat(bookingRepository.confirmPendingBankTransferBooking("BKG-CAS0004")).isEqualTo(0);
@@ -86,21 +75,27 @@ class BookingRepositoryTest extends IntegrationTest{
     }
 
     private Booking savePendingBankTransferBooking(String bookingId) {
-        return savePendingBankTransferBooking(bookingId, LocalDate.now().plusDays(10));
+        return bookingRepository.save(pendingBooking(bookingId).build());
     }
 
     private Booking savePendingBankTransferBooking(String bookingId, LocalDate rentalStartDate) {
-        return bookingRepository.save(Booking.builder()
+        return bookingRepository.save(pendingBooking(bookingId)
+                .rentalStartDate(rentalStartDate)
+                .rentalEndDate(rentalStartDate.plusDays(3))
+                .build());
+    }
+
+    private Booking.BookingBuilder pendingBooking(String bookingId) {
+        return Booking.builder()
                 .id(bookingId)
                 .customerName("John Doe")
                 .vehicleId("VEH-001")
-                .rentalStartDate(rentalStartDate)
-                .rentalEndDate(rentalStartDate.plusDays(3))
+                .rentalStartDate(LocalDate.now().plusDays(10))
+                .rentalEndDate(LocalDate.now().plusDays(13))
                 .vehicleCategory(VehicleCategory.SUV)
                 .paymentMode(PaymentMode.BANK_TRANSFER)
                 .paymentReference("PAY-REF-" + bookingId)
-                .status(BookingStatus.PENDING_PAYMENT)
-                .build());
+                .status(BookingStatus.PENDING_PAYMENT);
     }
 
     private BookingStatus statusOf(String bookingId) {

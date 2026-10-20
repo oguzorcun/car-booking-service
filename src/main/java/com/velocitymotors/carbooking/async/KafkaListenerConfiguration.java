@@ -7,7 +7,7 @@ import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
 
 @Configuration
-public class KafkaConsumerConfig {
+public class KafkaListenerConfiguration {
 
     /**
      * Transient failures (database down, optimistic lock conflict) are retried 3 times, 1s apart
