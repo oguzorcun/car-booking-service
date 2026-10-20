@@ -1,6 +1,5 @@
 package com.velocitymotors.carbooking.integration;
 
-import com.velocitymotors.carbooking.TestcontainersConfiguration;
 import com.velocitymotors.carbooking.generated.booking.model.BookingDetails;
 import com.velocitymotors.carbooking.generated.booking.model.BookingResponse;
 import com.velocitymotors.carbooking.model.PaymentMode;

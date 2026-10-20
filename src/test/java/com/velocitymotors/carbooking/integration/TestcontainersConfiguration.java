@@ -1,4 +1,4 @@
-package com.velocitymotors.carbooking;
+package com.velocitymotors.carbooking.integration;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
