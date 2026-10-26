@@ -4,6 +4,7 @@ import com.velocitymotors.carbooking.client.CreditCardClient;
 import com.velocitymotors.carbooking.exception.BookingValidationException;
 import com.velocitymotors.carbooking.exception.CreditCardPaymentRejectedException;
 import com.velocitymotors.carbooking.model.Booking;
+import com.velocitymotors.carbooking.model.BookingStatus;
 import com.velocitymotors.carbooking.model.CreateBookingCommand;
 import com.velocitymotors.carbooking.persistence.BookingRepository;
 import com.velocitymotors.carbooking.persistence.InMemoryVehicleRepository;
@@ -21,6 +22,8 @@ public class BookingService {
 
     private static final int BANK_TRANSFER_PAYMENT_DEADLINE_DAYS = 2;
     private static final int MAX_RENTAL_DAYS = 21;
+    private static final List<BookingStatus> BLOCKING_STATUSES =
+            List.of(BookingStatus.CONFIRMED, BookingStatus.PENDING_PAYMENT);
     private final CreditCardClient creditCardClient;
     private final BookingRepository bookingRepository;
     private final InMemoryVehicleRepository vehicleRepository;
@@ -67,7 +70,6 @@ public class BookingService {
         return bookingRepository.cancelPendingBankTransferBookingsStartingBefore(earliestBookingRentalStartDate);
     }
 
-    // TODO: Need more validations?
     private void validate(CreateBookingCommand command) {
         if (!command.rentalEndDate().isAfter(command.rentalStartDate())) {
             throw new BookingValidationException("Rental end date must be after rental start date");
@@ -77,6 +79,11 @@ public class BookingService {
         }
         if (!vehicleRepository.existsById(command.vehicleId())) {
             throw new BookingValidationException("Invalid vehicle id: " + command.vehicleId());
+        }
+        if (bookingRepository.countOverlappingBookings(
+                command.vehicleId(), command.rentalStartDate(), command.rentalEndDate(), BLOCKING_STATUSES) > 0) {
+            throw new BookingValidationException("Vehicle " + command.vehicleId() + " is not available between "
+                    + command.rentalStartDate() + " and " + command.rentalEndDate());
         }
     }
 

@@ -11,11 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * 1. posts a booking via API
@@ -65,5 +67,24 @@ class BookingApiTest extends AbstractIntegrationTest {
                 .orElseThrow();
         // mapping of other fields covered by BookingControllerTest
         assertThat(listed.getRentalStartDate()).isEqualTo(rentalStartDate);
+    }
+
+    @Test
+    void rejectsBookingForAVehicleAlreadyBookedOverTheSamePeriod() {
+        LocalDate rentalStartDate = LocalDate.now().plusDays(100);
+        LocalDate rentalEndDate = rentalStartDate.plusDays(3);
+        String firstRequest = bookingRequest("John Doe", "VEH-002", rentalStartDate, rentalEndDate,
+                VehicleCategory.SUV, PaymentMode.DIGITAL_WALLET, "PAY-REF-AV-1");
+        assertThat(postBooking(firstRequest).getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        String overlappingRequest = bookingRequest("Jane Roe", "VEH-002", rentalStartDate, rentalEndDate,
+                VehicleCategory.SUV, PaymentMode.DIGITAL_WALLET, "PAY-REF-AV-2");
+
+        assertThatThrownBy(() -> postBooking(overlappingRequest))
+                .isInstanceOf(HttpClientErrorException.BadRequest.class)
+                .hasMessageContaining("VEH-002")
+                .hasMessageContaining("not available");
+        assertThat(bookingRepository.findAll())
+                .noneMatch(booking -> "PAY-REF-AV-2".equals(booking.getPaymentReference()));
     }
 }
