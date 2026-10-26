@@ -25,6 +25,8 @@ class BookingServiceTest {
     private static final String PAYMENT_REFERENCE = "PAY-REF-1";
     private static final LocalDate RENTAL_START = LocalDate.now().plusDays(10);
     private static final LocalDate RENTAL_END = RENTAL_START.plusDays(3);
+    private static final List<BookingStatus> BLOCKING_STATUSES =
+            List.of(BookingStatus.CONFIRMED, BookingStatus.PENDING_PAYMENT);
 
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final InMemoryVehicleRepository vehicleRepository = mock(InMemoryVehicleRepository.class);
@@ -107,6 +109,19 @@ class BookingServiceTest {
 
         assertThatThrownBy(() -> bookingService.createBooking(command))
                 .isInstanceOf(BookingValidationException.class);
+        verify(bookingRepository, never()).save(any());
+    }
+
+    @Test
+    void rejectsBookingWhenVehicleIsAlreadyBookedForTheRequestedPeriod() {
+        given(vehicleRepository.existsById(VEHICLE_ID)).willReturn(true);
+        given(bookingRepository.countOverlappingBookings(VEHICLE_ID, RENTAL_START, RENTAL_END,
+                BLOCKING_STATUSES)).willReturn(1L);
+
+        assertThatThrownBy(() -> bookingService.createBooking(command(PaymentMode.DIGITAL_WALLET)))
+                .isInstanceOf(BookingValidationException.class)
+                .hasMessageContaining(VEHICLE_ID)
+                .hasMessageContaining("not available");
         verify(bookingRepository, never()).save(any());
     }
 
