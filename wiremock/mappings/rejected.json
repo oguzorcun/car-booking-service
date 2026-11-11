@@ -1,0 +1,13 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "url": "/host/credit-card-api/payment-status",
+    "bodyPatterns": [{ "matchesJsonPath": { "expression": "$.paymentReference", "contains": "REJECT" } }]
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "status": "REJECTED", "lastUpdateDate": "2026-10-16T10:00:00Z" }
+  }
+}
